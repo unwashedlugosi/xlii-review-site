@@ -683,7 +683,54 @@ function updateCounter() {
   document.getElementById('flag-count').textContent = count;
 }
 
-loadFromDB();
+// Migrate localStorage comments to Supabase (one-time)
+async function migrateLocalStorage() {
+  const oldFlags = JSON.parse(localStorage.getItem('xlii-review-flags-na') || '{}');
+  const oldNotes = JSON.parse(localStorage.getItem('xlii-review-notes-na') || '{}');
+  const allKeys = new Set([...Object.keys(oldFlags), ...Object.keys(oldNotes)]);
+  if (allKeys.size === 0) return;
+
+  let migrated = 0;
+  for (const i of allKeys) {
+    const showDate = getShowDate(parseInt(i));
+    if (!showDate) continue;
+    const note = oldNotes[i] || '';
+    const flagged = !!oldFlags[i];
+    if (!note && !flagged) continue;
+
+    // Restore to UI
+    if (flagged) {
+      flags[i] = true;
+      document.getElementById('flag-' + i)?.classList.add('flagged');
+    }
+    if (note) {
+      notes[i] = note;
+      const el = document.getElementById('note-' + i);
+      if (el) el.value = note;
+    }
+
+    // Save to Supabase
+    await fetch(SB_URL + '/xlii_review_comments', {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ collection: COLLECTION, show_date: showDate, flagged, note, updated_at: new Date().toISOString() })
+    });
+    migrated++;
+  }
+
+  if (migrated > 0) {
+    console.log('Migrated ' + migrated + ' comments to Supabase');
+    localStorage.setItem('xlii-review-migrated', 'true');
+    updateCounter();
+  }
+}
+
+// Load from Supabase first, then migrate localStorage if needed
+loadFromDB().then(() => {
+  if (!localStorage.getItem('xlii-review-migrated')) {
+    migrateLocalStorage();
+  }
+});
 </script>
 </body>
 </html>
