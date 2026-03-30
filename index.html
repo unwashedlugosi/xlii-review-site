@@ -606,35 +606,84 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
 </div>
 
 <script>
-const flags = JSON.parse(localStorage.getItem('xlii-review-flags-na') || '{}');
-const notes = JSON.parse(localStorage.getItem('xlii-review-notes-na') || '{}');
+const SB_URL = 'https://dhwllgdxpeucldtmzhme.supabase.co/rest/v1';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2xsZ2R4cGV1Y2xkdG16aG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMzI2NTMsImV4cCI6MjA4NTgwODY1M30.PmDxpoWXP0zA2sJLgRxAfODH1JcjdFOoRMdnGZwJYLE';
+const SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates,return=minimal' };
+const COLLECTION = 'new_animal';
 
-// Restore state
-Object.keys(flags).forEach(i => {
-  if (flags[i]) document.getElementById('flag-' + i)?.classList.add('flagged');
-});
-Object.keys(notes).forEach(i => {
-  const el = document.getElementById('note-' + i);
-  if (el) el.value = notes[i];
-});
-updateCounter();
+const flags = {};
+const notes = {};
+let saveTimer = null;
+
+// Get show date from DOM for a given index
+function getShowDate(i) {
+  const el = document.querySelector('#show-' + i + ' .show-date');
+  return el ? el.textContent.trim() : '';
+}
+
+// Load from Supabase on page load
+async function loadFromDB() {
+  try {
+    const r = await fetch(SB_URL + '/xlii_review_comments?collection=eq.' + COLLECTION + '&select=*', { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } });
+    const data = await r.json();
+    data.forEach(row => {
+      // Find the show index by date
+      for (let i = 0; i < 33; i++) {
+        if (getShowDate(i) === row.show_date) {
+          if (row.flagged) {
+            flags[i] = true;
+            document.getElementById('flag-' + i)?.classList.add('flagged');
+          }
+          if (row.note) {
+            notes[i] = row.note;
+            const el = document.getElementById('note-' + i);
+            if (el) el.value = row.note;
+          }
+          break;
+        }
+      }
+    });
+    updateCounter();
+  } catch(e) { console.error('Load error:', e); }
+}
+
+// Save a single show's flag/note to Supabase
+function saveToDB(i) {
+  const showDate = getShowDate(i);
+  if (!showDate) return;
+  fetch(SB_URL + '/xlii_review_comments', {
+    method: 'POST',
+    headers: SB_HEADERS,
+    body: JSON.stringify({
+      collection: COLLECTION,
+      show_date: showDate,
+      flagged: !!flags[i],
+      note: notes[i] || '',
+      updated_at: new Date().toISOString()
+    })
+  }).catch(e => console.error('Save error:', e));
+}
 
 function toggleFlag(i) {
   flags[i] = !flags[i];
   document.getElementById('flag-' + i).classList.toggle('flagged');
-  localStorage.setItem('xlii-review-flags-na', JSON.stringify(flags));
   updateCounter();
+  saveToDB(i);
 }
 
 function saveNote(i) {
   notes[i] = document.getElementById('note-' + i).value;
-  localStorage.setItem('xlii-review-notes-na', JSON.stringify(notes));
+  // Debounce saves
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveToDB(i), 1000);
 }
 
 function updateCounter() {
   const count = Object.values(flags).filter(Boolean).length;
   document.getElementById('flag-count').textContent = count;
 }
+
+loadFromDB();
 </script>
 </body>
 </html>
