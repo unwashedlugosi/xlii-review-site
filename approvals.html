@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XLIIs — Approval Log</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'SF Mono', 'Monaco', 'Menlo', monospace; background: #0a0a0a; color: #e0e0e0; padding: 16px; max-width: 700px; margin: 0 auto; }
+h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
+.subtitle { font-size: 11px; color: #888; margin-bottom: 20px; }
+.collection { margin-bottom: 28px; border: 1px solid #333; border-radius: 8px; overflow: hidden; }
+.collection-header { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+.approved .collection-header { background: #0a1a0a; border-bottom: 1px solid #1a3a1a; }
+.pending .collection-header { background: #1a1a0a; border-bottom: 1px solid #3a3a1a; }
+.collection-name { font-size: 14px; font-weight: bold; }
+.approved .collection-name { color: #51cf66; }
+.pending .collection-name { color: #ffd43b; }
+.status-badge { font-size: 10px; padding: 3px 10px; border-radius: 4px; letter-spacing: 1px; font-weight: bold; }
+.approved .status-badge { background: #0a2a0a; color: #51cf66; border: 1px solid #1a4a1a; }
+.pending .status-badge { background: #2a2a0a; color: #ffd43b; border: 1px solid #4a4a1a; }
+.details { padding: 12px 14px; font-size: 11px; line-height: 1.7; color: #aaa; }
+.details strong { color: #ccc; }
+.detail-row { margin-bottom: 6px; }
+.label { color: #666; min-width: 120px; display: inline-block; }
+.quote { color: #7a7; font-style: italic; margin: 8px 0; padding-left: 12px; border-left: 2px solid #1a3a1a; }
+.verify { margin-top: 10px; padding: 8px 12px; background: #111; border-radius: 6px; font-size: 10px; color: #666; }
+.verify strong { color: #888; }
+.nav { margin-bottom: 16px; font-size: 11px; }
+.nav a { color: #4a8a4a; text-decoration: none; }
+.nav a:hover { color: #51cf66; }
+.timestamp { color: #555; font-size: 10px; }
+</style>
+</head>
+<body>
+<h1>XLIIs APPROVAL LOG</h1>
+<div class="subtitle">What Dave approved, when, and where it lives. Updated after every approval.</div>
+
+<div class="nav">
+  Review pages: 
+  <a href="/">Young Bettys</a> · 
+  <a href="/cornell-review.html">Cornell</a> · 
+  <a href="/wos-review.html">Wall of Sound</a>
+</div>
+
+<div class="collection approved">
+  <div class="collection-header">
+    <span class="collection-name">NEW ANIMAL — 33 shows</span>
+    <span class="status-badge">✓ APPROVED</span>
+  </div>
+  <div class="details">
+    <div class="detail-row"><span class="label">Approved:</span> <strong>March 29, 2026 ~9:49 PM ET</strong></div>
+    <div class="detail-row"><span class="label">Shows:</span> 33 (1979-1980)</div>
+    <div class="detail-row"><span class="label">Word count:</span> 171-215 words, avg 190</div>
+    <div class="detail-row"><span class="label">Context:</span> First collection completed — chosen because it was the shortest. Dave reviewed all 33 on the review site.</div>
+    <div class="detail-row"><span class="label">Approved source:</span> <code>xlii-review-site commit 11e547a</code></div>
+    <div class="detail-row"><span class="label">In shows.json:</span> Yes — verified 33/33 exact match on March 30, 2026 3:30 PM ET</div>
+    <div class="verify"><strong>Verification:</strong> Run <code>git show 11e547a:index.html</code> in xlii-review-site and compare against shows.json. All 33 descriptions match character-for-character.</div>
+  </div>
+</div>
+
+<div class="collection approved">
+  <div class="collection-header">
+    <span class="collection-name">YOUNG BETTYS — 59 shows</span>
+    <span class="status-badge">✓ APPROVED</span>
+  </div>
+  <div class="details">
+    <div class="detail-row"><span class="label">Approved:</span> <strong>March 30, 2026 ~12:30 PM ET</strong></div>
+    <div class="detail-row"><span class="label">Shows:</span> 59 (1969-1973)</div>
+    <div class="detail-row"><span class="label">Word count:</span> ~180-210 words, avg 194</div>
+    <div class="detail-row"><span class="label">Context:</span> Second collection approved. Dave reviewed on the review site.</div>
+    <div class="quote">"These YBs are all good. I reviewed them last night I think. They're great."</div>
+    <div class="detail-row"><span class="label">Approved source:</span> <code>xlii-review-site/index.html</code> (current main branch)</div>
+    <div class="detail-row"><span class="label">In shows.json:</span> Yes — verified 59/59 exact match on March 30, 2026 3:30 PM ET</div>
+    <div class="verify"><strong>Verification:</strong> Parse review-text divs from index.html and compare against shows.json. All 59 descriptions match character-for-character.</div>
+  </div>
+</div>
+
+<div class="collection pending">
+  <div class="collection-header">
+    <span class="collection-name">CORNELL & COMPANY — 42 shows</span>
+    <span class="status-badge">⏳ AWAITING REVIEW</span>
+  </div>
+  <div class="details">
+    <div class="detail-row"><span class="label">Status:</span> Written March 30, 2026. Full rewrite with deep research.</div>
+    <div class="detail-row"><span class="label">Shows:</span> 42 (1977)</div>
+    <div class="detail-row"><span class="label">Word count:</span> 133-400 words, avg 179</div>
+    <div class="detail-row"><span class="label">Review page:</span> <a href="/cornell-review.html">cornell-review.html</a></div>
+    <div class="detail-row"><span class="label">In shows.json:</span> Yes, but NOT YET APPROVED</div>
+  </div>
+</div>
+
+<div class="collection pending">
+  <div class="collection-header">
+    <span class="collection-name">WALL OF SOUND — 37 shows</span>
+    <span class="status-badge">⏳ AWAITING REVIEW</span>
+  </div>
+  <div class="details">
+    <div class="detail-row"><span class="label">Status:</span> From draft files. Never formally reviewed.</div>
+    <div class="detail-row"><span class="label">Shows:</span> 37 (1974)</div>
+    <div class="detail-row"><span class="label">Word count:</span> 131-250 words, avg 187</div>
+    <div class="detail-row"><span class="label">Review page:</span> <a href="/wos-review.html">wos-review.html</a></div>
+    <div class="detail-row"><span class="label">In shows.json:</span> Yes, but NOT YET APPROVED</div>
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 12px; background: #111; border-radius: 8px; font-size: 10px; color: #555; line-height: 1.6;">
+  <strong style="color:#888;">How this works:</strong> When Dave approves a collection, this page gets updated immediately with the timestamp, Dave's exact words, and the git commit where the approved version lives. Before any build or submission to Apple, a verification script confirms that shows.json matches the approved source for every collection. Nothing ships until all four collections show ✓ APPROVED.
+</div>
+
+</body>
+</html>
