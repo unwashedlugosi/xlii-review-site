@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>End of Tape — Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a14;
+    color: #33ff33;
+    font-family: 'VT323', monospace;
+    min-height: 100vh;
+  }
+
+  /* The now-playing screen behind (blurred) */
+  .behind {
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, #0a0a14 0%, #0e1428 40%, #0a0a14 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    filter: blur(3px); opacity: 0.2;
+  }
+  .behind-tape { font-size: 60px; opacity: 0.3; }
+  .behind-track { font-size: 28px; opacity: 0.4; letter-spacing: 2px; }
+
+  /* End of tape overlay */
+  .eot-overlay {
+    position: fixed; inset: 0;
+    background: rgba(10, 10, 20, 0.97);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    z-index: 9999;
+    padding: 20px;
+  }
+
+  .eot-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  .eot-title {
+    font-size: 32px;
+    letter-spacing: 6px;
+    text-shadow: 0 0 12px #33ff3366;
+    margin-bottom: 24px;
+  }
+
+  .eot-show {
+    font-size: 18px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  .eot-venue {
+    font-size: 16px;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    margin-bottom: 40px;
+  }
+
+  .eot-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .eot-btn {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #33ff33;
+    background: transparent;
+    border: 2px solid #33ff3388;
+    padding: 14px 30px;
+    cursor: pointer;
+    text-shadow: 0 0 10px #33ff3388;
+    box-shadow: 0 0 15px #33ff3318, inset 0 0 15px #33ff3308;
+    letter-spacing: 3px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: all 0.2s;
+  }
+
+  .eot-btn:active {
+    background: #33ff3315;
+    border-color: #33ff33;
+  }
+
+  .eot-btn-rate {
+    border-color: #33ff3344;
+    opacity: 0.7;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+  /* Rating screen */
+  .rate-screen {
+    position: fixed; inset: 0;
+    background: rgba(10, 10, 20, 0.98);
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    z-index: 10000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .rate-screen.visible { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  .rate-title {
+    font-size: 28px;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 12px #33ff3366;
+  }
+
+  .rate-subtitle {
+    font-size: 16px;
+    opacity: 0.6;
+    margin-bottom: 32px;
+    line-height: 1.5;
+    max-width: 300px;
+  }
+
+  .rate-stars {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .rate-star {
+    font-size: 44px;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .rate-star.lit {
+    opacity: 1;
+    text-shadow: 0 0 16px #33ff3366;
+  }
+  .rate-star:active {
+    transform: scale(1.2);
+  }
+
+  .rate-message {
+    font-size: 18px;
+    opacity: 0;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+    transition: opacity 0.3s;
+    min-height: 24px;
+  }
+  .rate-message.visible { opacity: 0.8; }
+
+  .rate-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .rate-btn {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: #33ff33;
+    background: transparent;
+    border: 1px solid #33ff3366;
+    padding: 12px 24px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: all 0.2s;
+  }
+  .rate-btn:active {
+    background: #33ff3315;
+    border-color: #33ff33;
+  }
+  .rate-btn-primary {
+    border-width: 2px;
+    border-color: #33ff3388;
+    font-size: 20px;
+    display: none;
+  }
+  .rate-btn-primary.visible { display: block; }
+
+  .rate-skip {
+    font-size: 14px;
+    opacity: 0.4;
+    cursor: pointer;
+    margin-top: 8px;
+    letter-spacing: 2px;
+  }
+
+  /* Demo controls */
+  .demo-toggle {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: #33ff3355;
+    letter-spacing: 2px;
+    cursor: pointer;
+    z-index: 20000;
+  }
+</style>
+</head>
+<body>
+
+<!-- Blurred now-playing behind -->
+<div class="behind">
+  <div class="behind-tape">◼</div>
+  <div class="behind-track">COLD RAIN AND SNOW</div>
+</div>
+
+<!-- End of Tape overlay -->
+<div class="eot-overlay" id="eot">
+  <div class="eot-icon">◼</div>
+  <div class="eot-title">END OF TAPE</div>
+  <div class="eot-show">APR 29, 1971</div>
+  <div class="eot-venue">FILLMORE EAST, NEW YORK</div>
+  <div class="eot-buttons">
+    <button class="eot-btn" onclick="alert('→ Collections page')">[ BROWSE ]</button>
+    <button class="eot-btn" onclick="alert('→ Spin for random tape')">[ SPIN FOR A TAPE ]</button>
+    <button class="eot-btn eot-btn-rate" onclick="showRate()">[ RATE XLIIs ]</button>
+  </div>
+</div>
+
+<!-- Rating screen -->
+<div class="rate-screen" id="rate-screen">
+  <div class="rate-title">RATE XLIIs</div>
+  <div class="rate-subtitle">If you're enjoying the tapes, a rating helps other people find us.</div>
+
+  <div class="rate-stars" id="stars">
+    <span class="rate-star" data-val="1" onclick="setStars(1)">★</span>
+    <span class="rate-star" data-val="2" onclick="setStars(2)">★</span>
+    <span class="rate-star" data-val="3" onclick="setStars(3)">★</span>
+    <span class="rate-star" data-val="4" onclick="setStars(4)">★</span>
+    <span class="rate-star" data-val="5" onclick="setStars(5)">★</span>
+  </div>
+
+  <div class="rate-message" id="rate-msg"></div>
+
+  <div class="rate-actions">
+    <button class="rate-btn rate-btn-primary" id="rate-submit" onclick="submitRating()">[ SUBMIT RATING ]</button>
+    <button class="rate-btn" onclick="hideRate()">[ BACK ]</button>
+    <div class="rate-skip" onclick="hideRate()">NOT NOW</div>
+  </div>
+</div>
+
+<div class="demo-toggle" onclick="toggleDemo()">TAP TO TOGGLE SCREENS</div>
+
+<script>
+let selectedStars = 0;
+
+function showRate() {
+  document.getElementById('eot').style.display = 'none';
+  document.getElementById('rate-screen').classList.add('visible');
+  selectedStars = 0;
+  updateStars();
+}
+
+function hideRate() {
+  document.getElementById('rate-screen').classList.remove('visible');
+  document.getElementById('eot').style.display = 'flex';
+}
+
+function setStars(n) {
+  selectedStars = n;
+  updateStars();
+}
+
+function updateStars() {
+  const stars = document.querySelectorAll('.rate-star');
+  const msg = document.getElementById('rate-msg');
+  const submit = document.getElementById('rate-submit');
+
+  stars.forEach((s, i) => {
+    s.classList.toggle('lit', i < selectedStars);
+  });
+
+  const messages = {
+    0: '',
+    1: '',
+    2: '',
+    3: 'THANK YOU',
+    4: 'THANK YOU',
+    5: 'THANK YOU'
+  };
+
+  msg.textContent = messages[selectedStars] || '';
+  msg.classList.toggle('visible', selectedStars > 0);
+  submit.classList.toggle('visible', selectedStars > 0);
+}
+
+function submitRating() {
+  // On iOS this would trigger SKStoreReviewController
+  alert('→ Opens App Store rating dialog (' + selectedStars + ' stars)');
+}
+
+function toggleDemo() {
+  const eot = document.getElementById('eot');
+  const rate = document.getElementById('rate-screen');
+  if (rate.classList.contains('visible')) {
+    hideRate();
+  } else if (eot.style.display === 'none') {
+    eot.style.display = 'flex';
+  } else {
+    showRate();
+  }
+}
+</script>
+</body>
+</html>
