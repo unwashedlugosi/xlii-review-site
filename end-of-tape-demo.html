@@ -203,6 +203,42 @@
     letter-spacing: 2px;
   }
 
+  .rate-review-box {
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .rate-review-box.visible { display: block; }
+  .rate-review-label {
+    font-size: 14px;
+    opacity: 0.5;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+  .rate-review-input {
+    width: 100%;
+    min-height: 80px;
+    background: rgba(51, 255, 51, 0.04);
+    border: 1px solid #33ff3344;
+    border-radius: 6px;
+    color: #33ff33;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    padding: 10px;
+    resize: vertical;
+    letter-spacing: 1px;
+    line-height: 1.4;
+  }
+  .rate-review-input:focus {
+    outline: none;
+    border-color: #33ff3388;
+  }
+  .rate-review-input::placeholder {
+    color: #33ff3333;
+  }
+
   /* Demo controls */
   .demo-toggle {
     position: fixed;
@@ -254,6 +290,11 @@
 
   <div class="rate-message" id="rate-msg"></div>
 
+  <div class="rate-review-box" id="review-box">
+    <div class="rate-review-label">WRITE A REVIEW (OPTIONAL)</div>
+    <textarea class="rate-review-input" id="review-text" placeholder="Tell people what you think of the app..." maxlength="500"></textarea>
+  </div>
+
   <div class="rate-actions">
     <button class="rate-btn rate-btn-primary" id="rate-submit" onclick="submitRating()">[ SUBMIT RATING ]</button>
     <button class="rate-btn" onclick="hideRate()">[ BACK ]</button>
@@ -304,11 +345,13 @@ function updateStars() {
   msg.textContent = messages[selectedStars] || '';
   msg.classList.toggle('visible', selectedStars > 0);
   submit.classList.toggle('visible', selectedStars > 0);
+  document.getElementById('review-box').classList.toggle('visible', selectedStars > 0);
 }
 
 function submitRating() {
-  // On iOS this would trigger SKStoreReviewController
-  alert('→ Opens App Store rating dialog (' + selectedStars + ' stars)');
+  const review = document.getElementById('review-text').value.trim();
+  const msg = review ? ' with review: "' + review.substring(0, 50) + '..."' : '';
+  alert('→ Opens App Store rating dialog (' + selectedStars + ' stars' + msg + ')');
 }
 
 function toggleDemo() {
