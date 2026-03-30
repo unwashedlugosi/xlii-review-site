@@ -23,6 +23,11 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
 .flag-btn:hover { background: #2a2a2a; color: #fff; }
 .flag-btn.flagged { background: #4a1a1a; border-color: #ff6b6b; color: #ff6b6b; }
 .flag-note { flex: 1; font-size: 10px; background: #111; border: 1px solid #333; color: #ccc; padding: 4px 8px; border-radius: 4px; font-family: inherit; }
+.flag-note.saved { border-color: #51cf66; }
+.save-status { font-size: 9px; min-width: 50px; text-align: center; letter-spacing: 1px; transition: opacity 0.3s; }
+.save-status.saving { color: #ffd43b; }
+.save-status.saved { color: #51cf66; }
+.save-status.error { color: #ff6b6b; }
 .counter { position: fixed; bottom: 12px; right: 12px; background: #1a1a1a; border: 1px solid #333; padding: 8px 12px; border-radius: 8px; font-size: 11px; color: #888; z-index: 100; }
 .counter strong { color: #51cf66; }
 </style>
@@ -53,7 +58,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(0)" id="flag-0">FLAG</button>
-    <input class="flag-note" id="note-0" placeholder="Notes..." oninput="saveNote(0)" />
+    <input class="flag-note" id="note-0" placeholder="Notes..." oninput="saveNote(0)" /><span class="save-status" id="status-0"></span>
   </div>
 </div>
 
@@ -70,7 +75,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(1)" id="flag-1">FLAG</button>
-    <input class="flag-note" id="note-1" placeholder="Notes..." oninput="saveNote(1)" />
+    <input class="flag-note" id="note-1" placeholder="Notes..." oninput="saveNote(1)" /><span class="save-status" id="status-1"></span>
   </div>
 </div>
 
@@ -87,7 +92,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(2)" id="flag-2">FLAG</button>
-    <input class="flag-note" id="note-2" placeholder="Notes..." oninput="saveNote(2)" />
+    <input class="flag-note" id="note-2" placeholder="Notes..." oninput="saveNote(2)" /><span class="save-status" id="status-2"></span>
   </div>
 </div>
 
@@ -104,7 +109,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(3)" id="flag-3">FLAG</button>
-    <input class="flag-note" id="note-3" placeholder="Notes..." oninput="saveNote(3)" />
+    <input class="flag-note" id="note-3" placeholder="Notes..." oninput="saveNote(3)" /><span class="save-status" id="status-3"></span>
   </div>
 </div>
 
@@ -121,7 +126,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(4)" id="flag-4">FLAG</button>
-    <input class="flag-note" id="note-4" placeholder="Notes..." oninput="saveNote(4)" />
+    <input class="flag-note" id="note-4" placeholder="Notes..." oninput="saveNote(4)" /><span class="save-status" id="status-4"></span>
   </div>
 </div>
 
@@ -138,7 +143,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(5)" id="flag-5">FLAG</button>
-    <input class="flag-note" id="note-5" placeholder="Notes..." oninput="saveNote(5)" />
+    <input class="flag-note" id="note-5" placeholder="Notes..." oninput="saveNote(5)" /><span class="save-status" id="status-5"></span>
   </div>
 </div>
 
@@ -155,7 +160,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(6)" id="flag-6">FLAG</button>
-    <input class="flag-note" id="note-6" placeholder="Notes..." oninput="saveNote(6)" />
+    <input class="flag-note" id="note-6" placeholder="Notes..." oninput="saveNote(6)" /><span class="save-status" id="status-6"></span>
   </div>
 </div>
 
@@ -172,7 +177,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(7)" id="flag-7">FLAG</button>
-    <input class="flag-note" id="note-7" placeholder="Notes..." oninput="saveNote(7)" />
+    <input class="flag-note" id="note-7" placeholder="Notes..." oninput="saveNote(7)" /><span class="save-status" id="status-7"></span>
   </div>
 </div>
 
@@ -189,7 +194,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(8)" id="flag-8">FLAG</button>
-    <input class="flag-note" id="note-8" placeholder="Notes..." oninput="saveNote(8)" />
+    <input class="flag-note" id="note-8" placeholder="Notes..." oninput="saveNote(8)" /><span class="save-status" id="status-8"></span>
   </div>
 </div>
 
@@ -206,7 +211,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(9)" id="flag-9">FLAG</button>
-    <input class="flag-note" id="note-9" placeholder="Notes..." oninput="saveNote(9)" />
+    <input class="flag-note" id="note-9" placeholder="Notes..." oninput="saveNote(9)" /><span class="save-status" id="status-9"></span>
   </div>
 </div>
 
@@ -223,7 +228,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(10)" id="flag-10">FLAG</button>
-    <input class="flag-note" id="note-10" placeholder="Notes..." oninput="saveNote(10)" />
+    <input class="flag-note" id="note-10" placeholder="Notes..." oninput="saveNote(10)" /><span class="save-status" id="status-10"></span>
   </div>
 </div>
 
@@ -240,7 +245,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(11)" id="flag-11">FLAG</button>
-    <input class="flag-note" id="note-11" placeholder="Notes..." oninput="saveNote(11)" />
+    <input class="flag-note" id="note-11" placeholder="Notes..." oninput="saveNote(11)" /><span class="save-status" id="status-11"></span>
   </div>
 </div>
 
@@ -257,7 +262,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(12)" id="flag-12">FLAG</button>
-    <input class="flag-note" id="note-12" placeholder="Notes..." oninput="saveNote(12)" />
+    <input class="flag-note" id="note-12" placeholder="Notes..." oninput="saveNote(12)" /><span class="save-status" id="status-12"></span>
   </div>
 </div>
 
@@ -274,7 +279,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(13)" id="flag-13">FLAG</button>
-    <input class="flag-note" id="note-13" placeholder="Notes..." oninput="saveNote(13)" />
+    <input class="flag-note" id="note-13" placeholder="Notes..." oninput="saveNote(13)" /><span class="save-status" id="status-13"></span>
   </div>
 </div>
 
@@ -291,7 +296,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(14)" id="flag-14">FLAG</button>
-    <input class="flag-note" id="note-14" placeholder="Notes..." oninput="saveNote(14)" />
+    <input class="flag-note" id="note-14" placeholder="Notes..." oninput="saveNote(14)" /><span class="save-status" id="status-14"></span>
   </div>
 </div>
 
@@ -308,7 +313,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(15)" id="flag-15">FLAG</button>
-    <input class="flag-note" id="note-15" placeholder="Notes..." oninput="saveNote(15)" />
+    <input class="flag-note" id="note-15" placeholder="Notes..." oninput="saveNote(15)" /><span class="save-status" id="status-15"></span>
   </div>
 </div>
 
@@ -325,7 +330,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(16)" id="flag-16">FLAG</button>
-    <input class="flag-note" id="note-16" placeholder="Notes..." oninput="saveNote(16)" />
+    <input class="flag-note" id="note-16" placeholder="Notes..." oninput="saveNote(16)" /><span class="save-status" id="status-16"></span>
   </div>
 </div>
 
@@ -342,7 +347,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(17)" id="flag-17">FLAG</button>
-    <input class="flag-note" id="note-17" placeholder="Notes..." oninput="saveNote(17)" />
+    <input class="flag-note" id="note-17" placeholder="Notes..." oninput="saveNote(17)" /><span class="save-status" id="status-17"></span>
   </div>
 </div>
 
@@ -359,7 +364,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(18)" id="flag-18">FLAG</button>
-    <input class="flag-note" id="note-18" placeholder="Notes..." oninput="saveNote(18)" />
+    <input class="flag-note" id="note-18" placeholder="Notes..." oninput="saveNote(18)" /><span class="save-status" id="status-18"></span>
   </div>
 </div>
 
@@ -376,7 +381,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(19)" id="flag-19">FLAG</button>
-    <input class="flag-note" id="note-19" placeholder="Notes..." oninput="saveNote(19)" />
+    <input class="flag-note" id="note-19" placeholder="Notes..." oninput="saveNote(19)" /><span class="save-status" id="status-19"></span>
   </div>
 </div>
 
@@ -393,7 +398,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(20)" id="flag-20">FLAG</button>
-    <input class="flag-note" id="note-20" placeholder="Notes..." oninput="saveNote(20)" />
+    <input class="flag-note" id="note-20" placeholder="Notes..." oninput="saveNote(20)" /><span class="save-status" id="status-20"></span>
   </div>
 </div>
 
@@ -410,7 +415,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(21)" id="flag-21">FLAG</button>
-    <input class="flag-note" id="note-21" placeholder="Notes..." oninput="saveNote(21)" />
+    <input class="flag-note" id="note-21" placeholder="Notes..." oninput="saveNote(21)" /><span class="save-status" id="status-21"></span>
   </div>
 </div>
 
@@ -427,7 +432,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(22)" id="flag-22">FLAG</button>
-    <input class="flag-note" id="note-22" placeholder="Notes..." oninput="saveNote(22)" />
+    <input class="flag-note" id="note-22" placeholder="Notes..." oninput="saveNote(22)" /><span class="save-status" id="status-22"></span>
   </div>
 </div>
 
@@ -444,7 +449,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(23)" id="flag-23">FLAG</button>
-    <input class="flag-note" id="note-23" placeholder="Notes..." oninput="saveNote(23)" />
+    <input class="flag-note" id="note-23" placeholder="Notes..." oninput="saveNote(23)" /><span class="save-status" id="status-23"></span>
   </div>
 </div>
 
@@ -461,7 +466,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(24)" id="flag-24">FLAG</button>
-    <input class="flag-note" id="note-24" placeholder="Notes..." oninput="saveNote(24)" />
+    <input class="flag-note" id="note-24" placeholder="Notes..." oninput="saveNote(24)" /><span class="save-status" id="status-24"></span>
   </div>
 </div>
 
@@ -478,7 +483,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(25)" id="flag-25">FLAG</button>
-    <input class="flag-note" id="note-25" placeholder="Notes..." oninput="saveNote(25)" />
+    <input class="flag-note" id="note-25" placeholder="Notes..." oninput="saveNote(25)" /><span class="save-status" id="status-25"></span>
   </div>
 </div>
 
@@ -495,7 +500,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(26)" id="flag-26">FLAG</button>
-    <input class="flag-note" id="note-26" placeholder="Notes..." oninput="saveNote(26)" />
+    <input class="flag-note" id="note-26" placeholder="Notes..." oninput="saveNote(26)" /><span class="save-status" id="status-26"></span>
   </div>
 </div>
 
@@ -512,7 +517,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(27)" id="flag-27">FLAG</button>
-    <input class="flag-note" id="note-27" placeholder="Notes..." oninput="saveNote(27)" />
+    <input class="flag-note" id="note-27" placeholder="Notes..." oninput="saveNote(27)" /><span class="save-status" id="status-27"></span>
   </div>
 </div>
 
@@ -529,7 +534,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(28)" id="flag-28">FLAG</button>
-    <input class="flag-note" id="note-28" placeholder="Notes..." oninput="saveNote(28)" />
+    <input class="flag-note" id="note-28" placeholder="Notes..." oninput="saveNote(28)" /><span class="save-status" id="status-28"></span>
   </div>
 </div>
 
@@ -546,7 +551,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(29)" id="flag-29">FLAG</button>
-    <input class="flag-note" id="note-29" placeholder="Notes..." oninput="saveNote(29)" />
+    <input class="flag-note" id="note-29" placeholder="Notes..." oninput="saveNote(29)" /><span class="save-status" id="status-29"></span>
   </div>
 </div>
 
@@ -563,7 +568,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(30)" id="flag-30">FLAG</button>
-    <input class="flag-note" id="note-30" placeholder="Notes..." oninput="saveNote(30)" />
+    <input class="flag-note" id="note-30" placeholder="Notes..." oninput="saveNote(30)" /><span class="save-status" id="status-30"></span>
   </div>
 </div>
 
@@ -580,7 +585,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(31)" id="flag-31">FLAG</button>
-    <input class="flag-note" id="note-31" placeholder="Notes..." oninput="saveNote(31)" />
+    <input class="flag-note" id="note-31" placeholder="Notes..." oninput="saveNote(31)" /><span class="save-status" id="status-31"></span>
   </div>
 </div>
 
@@ -597,7 +602,7 @@ h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
   </div>
   <div class="flag-bar">
     <button class="flag-btn" onclick="toggleFlag(32)" id="flag-32">FLAG</button>
-    <input class="flag-note" id="note-32" placeholder="Notes..." oninput="saveNote(32)" />
+    <input class="flag-note" id="note-32" placeholder="Notes..." oninput="saveNote(32)" /><span class="save-status" id="status-32"></span>
   </div>
 </div>
 
@@ -637,7 +642,9 @@ async function loadFromDB() {
           if (row.note) {
             notes[i] = row.note;
             const el = document.getElementById('note-' + i);
-            if (el) el.value = row.note;
+            if (el) { el.value = row.note; el.classList.add('saved'); }
+            const st = document.getElementById('status-' + i);
+            if (st) { st.textContent = 'SAVED ✓'; st.className = 'save-status saved'; }
           }
           break;
         }
@@ -647,21 +654,35 @@ async function loadFromDB() {
   } catch(e) { console.error('Load error:', e); }
 }
 
-// Save a single show's flag/note to Supabase
-function saveToDB(i) {
+// Save a single show's flag/note to Supabase with visual confirmation
+async function saveToDB(i) {
   const showDate = getShowDate(i);
   if (!showDate) return;
-  fetch(SB_URL + '/xlii_review_comments', {
-    method: 'POST',
-    headers: SB_HEADERS,
-    body: JSON.stringify({
-      collection: COLLECTION,
-      show_date: showDate,
-      flagged: !!flags[i],
-      note: notes[i] || '',
-      updated_at: new Date().toISOString()
-    })
-  }).catch(e => console.error('Save error:', e));
+  const statusEl = document.getElementById('status-' + i);
+  const noteEl = document.getElementById('note-' + i);
+  if (statusEl) { statusEl.textContent = 'SAVING...'; statusEl.className = 'save-status saving'; }
+  try {
+    const r = await fetch(SB_URL + '/xlii_review_comments', {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({
+        collection: COLLECTION,
+        show_date: showDate,
+        flagged: !!flags[i],
+        note: notes[i] || '',
+        updated_at: new Date().toISOString()
+      })
+    });
+    if (r.ok) {
+      if (statusEl) { statusEl.textContent = 'SAVED ✓'; statusEl.className = 'save-status saved'; }
+      if (noteEl && notes[i]) noteEl.classList.add('saved');
+    } else {
+      if (statusEl) { statusEl.textContent = 'ERROR'; statusEl.className = 'save-status error'; }
+    }
+  } catch(e) {
+    console.error('Save error:', e);
+    if (statusEl) { statusEl.textContent = 'ERROR'; statusEl.className = 'save-status error'; }
+  }
 }
 
 function toggleFlag(i) {
