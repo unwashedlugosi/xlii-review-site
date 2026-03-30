@@ -174,10 +174,13 @@
 <div class="demo-section">
   <div class="demo-label">Scroll speed (points/second)</div>
   <div class="speed-controls">
-    <button class="speed-btn" onclick="setSpeed(20)">20 (slow)</button>
-    <button class="speed-btn active" onclick="setSpeed(30)">30 (recommended)</button>
-    <button class="speed-btn" onclick="setSpeed(40)">40</button>
-    <button class="speed-btn" onclick="setSpeed(50)">50 (fast)</button>
+    <button class="speed-btn" onclick="setSpeed(8)">8 (very slow)</button>
+    <button class="speed-btn" onclick="setSpeed(12)">12 (slow)</button>
+    <button class="speed-btn" onclick="setSpeed(16)">16</button>
+    <button class="speed-btn active" onclick="setSpeed(20)">20</button>
+    <button class="speed-btn" onclick="setSpeed(25)">25</button>
+    <button class="speed-btn" onclick="setSpeed(30)">30</button>
+    <button class="speed-btn" onclick="setSpeed(40)">40 (fast)</button>
   </div>
   <div class="demo-label" style="margin-top: 16px;">Start delay (seconds)</div>
   <div class="speed-controls">
@@ -189,7 +192,7 @@
 </div>
 
 <script>
-let speed = 30; // px per second
+let speed = 20; // px per second
 let delay = 2.5; // seconds
 
 function setupScrolling() {
