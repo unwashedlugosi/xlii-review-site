@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J-Card Discovery — Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a14;
+    color: #33ff33;
+    font-family: -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .discovery-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: slideInFromLeft 0.5s ease-out;
+  }
+
+  @keyframes slideInFromLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .discovery-content {
+    width: 92%;
+    max-width: 360px;
+    background: rgba(10, 10, 20, 0.95);
+    border: 1px solid rgba(51, 255, 51, 0.2);
+    border-radius: 20px;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .discovery-title {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #55ff55;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .discovery-subtitle {
+    font-size: 13px;
+    color: #33aa33;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* The phone animation area */
+  .phone-stage {
+    width: 280px;
+    height: 280px;
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Phone rotates to the right (clockwise 90deg) */
+  .phone-container {
+    width: 130px;
+    height: 260px;
+    position: absolute;
+    animation: rotatePhone 7s ease-in-out infinite;
+    transform-origin: center center;
+  }
+
+  @keyframes rotatePhone {
+    0%   { transform: rotate(0deg); }
+    12%  { transform: rotate(0deg); }
+    28%  { transform: rotate(90deg); }
+    52%  { transform: rotate(90deg); }
+    68%  { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  .phone-frame {
+    width: 100%;
+    height: 100%;
+    border: 3px solid #555;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #000;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 1px rgba(255,255,255,0.1);
+  }
+
+  /* Dynamic Island */
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 14px;
+    background: #111;
+    border-radius: 10px;
+    z-index: 10;
+  }
+
+  /* Now playing (portrait) — fills the phone screen */
+  .screen-portrait {
+    position: absolute;
+    inset: 0;
+    background-image: url('now-playing.png');
+    background-size: cover;
+    background-position: center;
+    animation: fadePortrait 7s ease-in-out infinite;
+  }
+
+  @keyframes fadePortrait {
+    0%   { opacity: 1; }
+    18%  { opacity: 1; }
+    24%  { opacity: 0; }
+    52%  { opacity: 0; }
+    58%  { opacity: 1; }
+    100% { opacity: 1; }
+  }
+
+  /* J-card (landscape) — counter-rotated -90deg so when the phone
+     rotates 90deg clockwise, this image appears right-side-up.
+     Sized to fill the phone's screen in landscape orientation. */
+  .screen-landscape {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* In landscape: phone width becomes height (130px) and height becomes width (260px) */
+    width: 260px;
+    height: 130px;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    background-image: url('jcard.jpg');
+    background-size: cover;
+    background-position: center;
+    animation: fadeLandscape 7s ease-in-out infinite;
+  }
+
+  @keyframes fadeLandscape {
+    0%   { opacity: 0; }
+    18%  { opacity: 0; }
+    24%  { opacity: 1; }
+    52%  { opacity: 1; }
+    58%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .rotate-hint {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #33aa33;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: pulseHint 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseHint {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  .got-it-btn {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    letter-spacing: 3px;
+    color: #55ff55;
+    background: rgba(51, 255, 51, 0.08);
+    border: 1px solid rgba(51, 255, 51, 0.3);
+    border-radius: 12px;
+    padding: 12px 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .got-it-btn:active {
+    background: rgba(51, 255, 51, 0.2);
+  }
+
+  .behind-content {
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background-image: url('now-playing.png');
+    background-size: cover;
+    background-position: center top;
+    filter: blur(3px);
+    opacity: 0.2;
+  }
+</style>
+</head>
+<body>
+
+<div class="behind-content"></div>
+
+<div class="discovery-overlay" id="discovery">
+  <div class="discovery-content">
+    <div class="discovery-title">Hidden Feature</div>
+    <div class="discovery-subtitle">Turn your phone sideways during a show to see the collector's original cassette insert.</div>
+
+    <div class="phone-stage">
+      <div class="phone-container">
+        <div class="phone-frame">
+          <div class="screen-portrait"></div>
+          <div class="screen-landscape"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rotate-hint">ROTATE YOUR PHONE TO REVEAL</div>
+
+    <button class="got-it-btn" onclick="document.getElementById('discovery').style.display='none'">[ GOT IT ]</button>
+  </div>
+</div>
+
+</body>
+</html>
