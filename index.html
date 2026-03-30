@@ -1100,10 +1100,15 @@ async function saveToDB(i) {
   const noteEl = document.getElementById('note-' + i);
   if (statusEl) { statusEl.textContent = 'SAVING...'; statusEl.className = 'save-status saving'; }
   try {
-    const r = await fetch(SB_URL + '/xlii_review_comments', {
-      method: 'POST', headers: SB_HEADERS,
-      body: JSON.stringify({ collection: COLLECTION, show_date: showDate, flagged: !!flags[i], note: notes[i] || '', updated_at: new Date().toISOString() })
-    });
+    const body = JSON.stringify({ collection: COLLECTION, show_date: showDate, flagged: !!flags[i], note: notes[i] || '', updated_at: new Date().toISOString() });
+    // Try POST first, fall back to PATCH if row exists
+    let r = await fetch(SB_URL + '/xlii_review_comments', { method: 'POST', headers: SB_HEADERS, body });
+    if (!r.ok) {
+      r = await fetch(SB_URL + '/xlii_review_comments?collection=eq.' + COLLECTION + '&show_date=eq.' + showDate, {
+        method: 'PATCH', headers: SB_HEADERS,
+        body: JSON.stringify({ flagged: !!flags[i], note: notes[i] || '', updated_at: new Date().toISOString() })
+      });
+    }
     if (r.ok) {
       if (statusEl) { statusEl.textContent = 'SAVED \u2713'; statusEl.className = 'save-status saved'; }
       if (noteEl && notes[i]) noteEl.classList.add('saved');
