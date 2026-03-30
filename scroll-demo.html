@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Name Scrolling — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a14;
+    color: #33ff33;
+    font-family: 'VT323', monospace;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 { font-size: 16px; letter-spacing: 3px; margin-bottom: 8px; opacity: 0.6; }
+  .subtitle { font-size: 13px; color: #33aa33; margin-bottom: 30px; text-align: center; }
+
+  .demo-section {
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 40px;
+  }
+
+  .demo-label {
+    font-size: 12px;
+    color: #1a8a1a;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .now-playing-mock {
+    background: #0e1428;
+    border: 1px solid #33ff3322;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .mock-date { font-size: 18px; opacity: 0.6; letter-spacing: 2px; margin-bottom: 4px; }
+  .mock-venue { font-size: 14px; opacity: 0.4; letter-spacing: 1px; margin-bottom: 16px; }
+
+  /* The track name container */
+  .track-name-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Fade edges */
+  .track-name-container.scrolling {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+
+  .track-name {
+    font-size: 34px;
+    text-shadow: 0 0 4px #33ff33dd, 0 0 10px #33ff3366;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    display: inline-block;
+  }
+
+  .track-name.scrolling {
+    animation: scrollBounce var(--scroll-duration) ease-in-out var(--scroll-delay) infinite alternate;
+  }
+
+  @keyframes scrollBounce {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(var(--scroll-distance)); }
+  }
+
+  .mock-controls {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 20px;
+    opacity: 0.4;
+  }
+
+  .speed-controls {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .speed-btn {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    padding: 4px 12px;
+    background: transparent;
+    border: 1px solid #33ff3344;
+    color: #33ff33;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .speed-btn.active {
+    border-color: #33ff33;
+    background: #33ff3322;
+  }
+
+  .info { font-size: 11px; color: #1a6a1a; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<h1>TRACK NAME SCROLLING</h1>
+<div class="subtitle">Bounce style (Apple Music). Adjust speed below.</div>
+
+<!-- Demo 1: Long title -->
+<div class="demo-section">
+  <div class="demo-label">Long title (scrolls)</div>
+  <div class="now-playing-mock">
+    <div class="mock-date">APR 29, 1971</div>
+    <div class="mock-venue">FILLMORE EAST</div>
+    <div class="track-name-container" id="container-1">
+      <div class="track-name" id="track-1">MISSISSIPPI HALF-STEP UPTOWN TOODELOO</div>
+    </div>
+    <div class="mock-controls"><span>|◀◀</span><span>▶</span><span>▶▶|</span></div>
+  </div>
+  <div class="info" id="info-1"></div>
+</div>
+
+<!-- Demo 2: Medium title -->
+<div class="demo-section">
+  <div class="demo-label">Medium title (scrolls slightly)</div>
+  <div class="now-playing-mock">
+    <div class="mock-date">MAY 8, 1977</div>
+    <div class="mock-venue">BARTON HALL</div>
+    <div class="track-name-container" id="container-2">
+      <div class="track-name" id="track-2">SCARLET BEGONIAS > FIRE ON THE MOUNTAIN</div>
+    </div>
+    <div class="mock-controls"><span>|◀◀</span><span>▶</span><span>▶▶|</span></div>
+  </div>
+  <div class="info" id="info-2"></div>
+</div>
+
+<!-- Demo 3: Short title -->
+<div class="demo-section">
+  <div class="demo-label">Short title (static — no scroll needed)</div>
+  <div class="now-playing-mock">
+    <div class="mock-date">FEB 27, 1969</div>
+    <div class="mock-venue">FILLMORE WEST</div>
+    <div class="track-name-container" id="container-3">
+      <div class="track-name" id="track-3">DARK STAR</div>
+    </div>
+    <div class="mock-controls"><span>|◀◀</span><span>▶</span><span>▶▶|</span></div>
+  </div>
+  <div class="info" id="info-3"></div>
+</div>
+
+<!-- Demo 4: Very long title -->
+<div class="demo-section">
+  <div class="demo-label">Very long title</div>
+  <div class="now-playing-mock">
+    <div class="mock-date">JUN 26, 1974</div>
+    <div class="mock-venue">PROVIDENCE CIVIC CENTER</div>
+    <div class="track-name-container" id="container-4">
+      <div class="track-name" id="track-4">TRUCKIN' > THE OTHER ONE > SPANISH JAM > WHARF RAT</div>
+    </div>
+    <div class="mock-controls"><span>|◀◀</span><span>▶</span><span>▶▶|</span></div>
+  </div>
+  <div class="info" id="info-4"></div>
+</div>
+
+<!-- Speed control -->
+<div class="demo-section">
+  <div class="demo-label">Scroll speed (points/second)</div>
+  <div class="speed-controls">
+    <button class="speed-btn" onclick="setSpeed(20)">20 (slow)</button>
+    <button class="speed-btn active" onclick="setSpeed(30)">30 (recommended)</button>
+    <button class="speed-btn" onclick="setSpeed(40)">40</button>
+    <button class="speed-btn" onclick="setSpeed(50)">50 (fast)</button>
+  </div>
+  <div class="demo-label" style="margin-top: 16px;">Start delay (seconds)</div>
+  <div class="speed-controls">
+    <button class="speed-btn" onclick="setDelay(1)">1s</button>
+    <button class="speed-btn" onclick="setDelay(2)">2s</button>
+    <button class="speed-btn active" onclick="setDelay(2.5)">2.5s (recommended)</button>
+    <button class="speed-btn" onclick="setDelay(3)">3s</button>
+  </div>
+</div>
+
+<script>
+let speed = 30; // px per second
+let delay = 2.5; // seconds
+
+function setupScrolling() {
+  for (let i = 1; i <= 4; i++) {
+    const container = document.getElementById('container-' + i);
+    const track = document.getElementById('track-' + i);
+    const info = document.getElementById('info-' + i);
+
+    // Reset
+    track.classList.remove('scrolling');
+    container.classList.remove('scrolling');
+    track.style.animation = 'none';
+
+    const containerWidth = container.offsetWidth;
+    const textWidth = track.scrollWidth;
+    const overflow = textWidth - containerWidth;
+
+    if (overflow > 0) {
+      const duration = overflow / speed;
+      track.style.setProperty('--scroll-distance', `-${overflow}px`);
+      track.style.setProperty('--scroll-duration', `${duration.toFixed(1)}s`);
+      track.style.setProperty('--scroll-delay', `${delay}s`);
+
+      // Force reflow then apply
+      void track.offsetHeight;
+      track.style.animation = '';
+      track.classList.add('scrolling');
+      container.classList.add('scrolling');
+
+      info.textContent = `overflow: ${overflow}px | duration: ${duration.toFixed(1)}s | speed: ${speed}px/s | delay: ${delay}s`;
+    } else {
+      info.textContent = `fits in container (${textWidth}px < ${containerWidth}px) — no scroll`;
+    }
+  }
+}
+
+function setSpeed(s) {
+  speed = s;
+  document.querySelectorAll('.speed-controls')[0].querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  setupScrolling();
+}
+
+function setDelay(d) {
+  delay = d;
+  document.querySelectorAll('.speed-controls')[1].querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  setupScrolling();
+}
+
+// Initial setup
+setTimeout(setupScrolling, 100);
+</script>
+</body>
+</html>
